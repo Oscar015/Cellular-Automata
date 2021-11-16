@@ -24,7 +24,26 @@ class GameOfLife:
             1 para las células vivas
             0 para las muertas
         """
+        self.seed = seed
         self.grid = seed
+
+    def plotSeed(self, figArgs={'dpi': 150, 'figsize': (4, 4)}):
+        rects = np.zeros((N, N), dtype=Rectangle)
+
+        fig, ax = plt.subplots(**figArgs)
+        ax.axis('equal')
+        ax.set_xlim(0, N)
+        ax.set_ylim(0, N)
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+
+        # Rellenamos el array con rectangulos del color adecuado a la célula
+        for i in range(N):
+            for j in range(N):
+                rects[i, j] = Rectangle(
+                    [i, N-j-1], 1, 1, color=self.setColor(j, i, self.seed))
+                ax.add_artist(rects[i, j])
+        plt.show()
 
     def update(self):
         """
@@ -76,23 +95,23 @@ class GameOfLife:
         self.ax.yaxis.set_visible(False)
 
         # Rellenamos el array con rectangulos del color adecuado a la célula
-        for i in range(N):
-            for j in range(N):
+        for j in range(N):
+            for i in range(N):
                 self.rects[i, j] = Rectangle(
-                    [i, j], 1, 1, color=self.setColor(i, j, self.grid))
+                    [i, N-j-1], 1, 1, color=self.setColor(j, i, self.grid))
                 self.ax.add_artist(self.rects[i, j])
 
         def animate(k):
             # Cambiamos los colores de los cuadrados
-            for i in range(N):
-                for j in range(N):
-                    self.rects[i, j].set_color(self.setColor(i, j, self.grid))
+            for j in range(N):
+                for i in range(N):
+                    self.rects[i, j].set_color(self.setColor(j, i, self.grid))
             # Y actualizamos la simulación
             self.update()
             return self.rects,
 
         self.anim = FuncAnimation(
-            self.fig, animate, frames=30, repeat=False, interval=100)
+            self.fig, animate, frames=30, interval=200)
         return self.anim
 
     def setColor(self, i, j, grid):
@@ -124,15 +143,38 @@ class GameOfLife:
 if __name__ == '__main__':
     N = 20
 
-    seed = np.zeros((N, N), dtype=int)
-    n = np.zeros((N, N), dtype=int)
-    init = [N//3, N//3], [N//3, N//3+1], [N//3-1, N//3+2],\
-        [N//3+1, N // 3+2], [2*N//3, 2*N//3],\
-        [2*N//3, 2*N//3+1], [2*N//3, 2*N//3+2]
+    # seed = np.zeros((N, N), dtype=int)
+    # init = [N//3, N//3], [N//3, N//3+1], [N//3-1, N//3+2],\
+    #     [N//3+1, N // 3+2], [2*N//3, 2*N//3],\
+    #     [2*N//3, 2*N//3+1], [2*N//3, 2*N//3+2], [2*N//3+2, 2*N//3],\
+    #     [2*N//3-1, 2*N//3]
 
-    for index in init:
-        seed[index[0], index[1]] = 1
+    # for index in init:
+    #     seed[index[1], index[0]] = 1
+
+    seed = np.array([
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+
     GOL = GameOfLife(seed)
-
+    GOL.plotSeed(figArgs={'dpi': 150, 'figsize': (5, 5)})
     anim = GOL.animation(figArgs={'dpi': 150, 'figsize': (5, 5)})
     plt.show()
