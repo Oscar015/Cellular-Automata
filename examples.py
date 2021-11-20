@@ -33,7 +33,7 @@ seed1 = np.array([
 seed2 = np.random.randint(0, 2, size=(100, 100))
 
 figArgs = {'dpi': 100, 'figsize': (5, 5)}
-animArgs1 = {'frames': 100, 'interval': 200, 'init_func': None}
+animArgs1 = {'frames': 10, 'interval': 200, 'init_func': None}
 animArgs2 = {'frames': 5, 'interval': 200, 'repeat': False}
 
 
@@ -42,7 +42,7 @@ GOL.plotSeed(figArgs)
 GOL.update()
 GOL.plotState(figArgs)
 GOL.reset()
-anim = GOL.animation(figArgs, animArgs1)
+anim = GOL.animation(figArgs, animArgs1, True, 'GameOfLive')
 plt.show()
 
 
