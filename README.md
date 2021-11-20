@@ -3,8 +3,8 @@
 A CellularAutomata class manage the updating of the simulation and the animations and the subclases modify the rulesFunction that is used to update the cells.
 A couple examples are de Conway's Game of life and an algorithm to smooth out random noise by forming islands and avoiding isolated cells.
 
-![Game of Life](media\GameOfLife.gif)
+![Game of Life](media/GameOfLife.gif)
 
-![Smooth caves](media\smoothCaves.gif)
+![Smooth caves](media/smoothCaves.gif)
 
-![Smooth noise](media\smoothNoise.gif)
+![Smooth noise](media/smoothNoise.gif)
