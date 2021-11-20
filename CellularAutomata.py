@@ -51,6 +51,25 @@ class CellularAutomata:
                 ax.add_artist(rects[i, j])
         plt.show()
 
+    def plotState(self, figArgs={'dpi': 150, 'figsize': (4, 4)}):
+        # Rellenamos el array con rectangulos del color adecuado a la célula
+        rects = np.zeros((self.N, self.N), dtype=Rectangle)
+
+        fig, ax = plt.subplots(**figArgs)
+        ax.axis('equal')
+        ax.set_xlim(0, self.N)
+        ax.set_ylim(0, self.N)
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+
+        # Rellenamos el array con rectangulos del color adecuado a la célula
+        for i in range(self.N):
+            for j in range(self.N):
+                rects[i, j] = Rectangle(
+                    [i, self.N-j-1], 1, 1, color=self.setColor(j, i, self.grid))
+                ax.add_artist(rects[i, j])
+        plt.show()
+
     def function(self, neighbours, i, j):
         return self.grid[i, j]
 
@@ -87,21 +106,21 @@ class CellularAutomata:
         """
 
         # Creamos un array de rectangulos vacio que representarán a las células
-        self.rects = np.zeros((self.N, self.N), dtype=Rectangle)
+        rects = np.zeros((self.N, self.N), dtype=Rectangle)
 
-        self.fig, self.ax = plt.subplots(**figArgs)
-        self.ax.axis('equal')
-        self.ax.set_xlim(0, self.N)
-        self.ax.set_ylim(0, self.N)
-        self.ax.xaxis.set_visible(False)
-        self.ax.yaxis.set_visible(False)
+        fig, ax = plt.subplots(**figArgs)
+        ax.axis('equal')
+        ax.set_xlim(0, self.N)
+        ax.set_ylim(0, self.N)
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
 
         # Rellenamos el array con rectangulos del color adecuado a la célula
         for j in range(self.N):
             for i in range(self.N):
-                self.rects[i, j] = Rectangle(
+                rects[i, j] = Rectangle(
                     [i, self.N-j-1], 1, 1, color=self.setColor(j, i, self.grid))
-                self.ax.add_artist(self.rects[i, j])
+                ax.add_artist(rects[i, j])
 
         def init():
             self.reset()
@@ -110,14 +129,14 @@ class CellularAutomata:
             # Cambiamos los colores de los cuadrados
             for i in range(self.N):
                 for j in range(self.N):
-                    self.rects[i, j].set_color(self.setColor(j, i, self.grid))
+                    rects[i, j].set_color(self.setColor(j, i, self.grid))
             # Y actualizamos la simulación
             self.update()
-            return self.rects,
+            return rects,
 
-        self.anim = FuncAnimation(
-            self.fig, animate, **animArgs)
-        return self.anim
+        anim = FuncAnimation(
+            fig, animate, **animArgs)
+        return anim
 
     def setColor(self, i, j, grid):
         """
