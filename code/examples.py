@@ -48,4 +48,7 @@ plt.show()
 
 SN = SmoothNoise(seed2)
 SN.plotSeed(figArgs)
+for i in range(10):
+    SN.update()
+    SN.plotState(figArgs)
 anim = SN.animation(figArgs, animArgs2, save=True, filePath='smoothNoise')
