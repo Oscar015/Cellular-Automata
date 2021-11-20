@@ -99,7 +99,7 @@ class CellularAutomata:
 
         self.grid = newGrid
 
-    def animation(self, figArgs={'dpi': 150, 'figsize': (4, 4)}, animArgs={'frames': 1, 'interval': 200}):
+    def animation(self, figArgs={'dpi': 150, 'figsize': (4, 4)}, animArgs={'frames': 1, 'interval': 200}, save=False, filePath='animation'):
         """
         Crea la animación del Juego de la vida
 
@@ -136,6 +136,8 @@ class CellularAutomata:
 
         anim = FuncAnimation(
             fig, animate, **animArgs)
+        if save:
+            anim.save(f'{filePath}.gif')
         return anim
 
     def setColor(self, i, j, grid):
