@@ -179,9 +179,7 @@ class GameOfLife(CellularAutomata):
 
 class SmoothNoise(CellularAutomata):
     def function(self, neighbours, i, j):
-        if neighbours >= 6:
+        if neighbours >= 5:
             return 1
-        elif neighbours <= 3:
+        elif neighbours < 5:
             return 0
-        else:
-            return self.grid[i, j]
