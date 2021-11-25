@@ -79,18 +79,11 @@ class CellularAutomata:
 
         self.grid = newGrid
 
-    def animation(self, figArgs={'dpi': 150, 'figsize': (4, 4)}, animArgs={'frames': 1, 'interval': 200}, save=False, filePath='animation'):
+    def animation(self, figArgs=None, animArgs=None, save=False, filePath='animation'):
         """
         Crea la animación del Juego de la vida
 
         """
-
-        fig, ax = plt.subplots(**figArgs)
-        ax.axis('equal')
-        ax.xaxis.set_visible(False)
-        ax.yaxis.set_visible(False)
-        im = plt.imshow(self.seed, cmap=self.cm, interpolation='none')
-
         def init():
             self.reset()
             return [im]
@@ -99,6 +92,15 @@ class CellularAutomata:
             self.update()
             im.set_array(self.grid)
             return [im]
+
+        animArgs = animArgs or {'frames': 1, 'interval': 200, 'initfunc': init}
+        figArgs = figArgs or {'dpi': 150, 'figsize': (4, 4)}
+
+        fig, ax = plt.subplots(**figArgs)
+        ax.axis('equal')
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        im = plt.imshow(self.seed, cmap=self.cm, interpolation='none')
 
         anim = FuncAnimation(
             fig, animate, **animArgs)
