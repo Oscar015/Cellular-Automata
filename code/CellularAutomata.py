@@ -26,52 +26,37 @@ class CellularAutomata:
         """
         self.seed = seed
         self.grid = seed
+        self.cm = plt.cm.Greys.reversed()
         # La región de juego será un cuadrado, para evitar errores se tomará
         # el menor de los tamaños horizontal y vertical.
-        self.N = np.min(seed.shape)
+        self.N, self.M = seed.shape
 
     def reset(self):
         self.grid = self.seed
 
     def plotSeed(self, figArgs={'dpi': 150, 'figsize': (4, 4)}):
-        rects = np.zeros((self.N, self.N), dtype=Rectangle)
-
         fig, ax = plt.subplots(**figArgs)
-        ax.axis('equal')
-        ax.set_xlim(0, self.N)
-        ax.set_ylim(0, self.N)
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
-
-        # Rellenamos el array con rectangulos del color adecuado a la célula
-        for i in range(self.N):
-            for j in range(self.N):
-                rects[i, j] = Rectangle(
-                    [i, self.N-j-1], 1, 1, color=self.setColor(j, i, self.seed))
-                ax.add_artist(rects[i, j])
-        plt.show()
+        plt.imshow(self.seed, cmap=self.cm, interpolation='none')
 
     def plotState(self, figArgs={'dpi': 150, 'figsize': (4, 4)}):
-        # Rellenamos el array con rectangulos del color adecuado a la célula
-        rects = np.zeros((self.N, self.N), dtype=Rectangle)
-
         fig, ax = plt.subplots(**figArgs)
-        ax.axis('equal')
-        ax.set_xlim(0, self.N)
-        ax.set_ylim(0, self.N)
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
+        plt.imshow(self.grid, cmap=self.cm, interpolation='none')
 
-        # Rellenamos el array con rectangulos del color adecuado a la célula
-        for i in range(self.N):
-            for j in range(self.N):
-                rects[i, j] = Rectangle(
-                    [i, self.N-j-1], 1, 1, color=self.setColor(j, i, self.grid))
-                ax.add_artist(rects[i, j])
-        plt.show()
-
-    def function(self, neighbours, i, j):
+    def functionRules(self, neighbours, i, j):
         return self.grid[i, j]
+
+    def functionNeighbours(self, i, j):
+        neighbours = 0
+        # Miramos los vecinos de la célula y contamos als vivas
+        for x in range(-1, 2):
+            for y in range(-1, 2):
+                if not x == y == 0:
+                    neighbours += self.grid[i+x, j+y]
+        return neighbours
 
     def update(self):
         """
@@ -84,18 +69,13 @@ class CellularAutomata:
         newGrid[self.N-1, :] = 0
 
         newGrid[:, 0] = 0
-        newGrid[:, self.N-1] = 0
+        newGrid[:, self.M-1] = 0
 
         # Recorremos todas las celulas
         for i in range(1, self.N-1):
-            for j in range(1, self.N-1):
-                neighbours = 0
-                # Miramos los vecinos de la célula y contamos als vivas
-                for x in range(-1, 2):
-                    for y in range(-1, 2):
-                        if not x == y == 0:
-                            neighbours += self.grid[i+x, j+y]
-                newGrid[i, j] = self.function(neighbours, i, j)
+            for j in range(1, self.M-1):
+                neighbours = self.functionNeighbours(i, j)
+                newGrid[i, j] = self.functionRules(neighbours, i, j)
 
         self.grid = newGrid
 
@@ -105,34 +85,20 @@ class CellularAutomata:
 
         """
 
-        # Creamos un array de rectangulos vacio que representarán a las células
-        rects = np.zeros((self.N, self.N), dtype=Rectangle)
-
         fig, ax = plt.subplots(**figArgs)
         ax.axis('equal')
-        ax.set_xlim(0, self.N)
-        ax.set_ylim(0, self.N)
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
-
-        # Rellenamos el array con rectangulos del color adecuado a la célula
-        for j in range(self.N):
-            for i in range(self.N):
-                rects[i, j] = Rectangle(
-                    [i, self.N-j-1], 1, 1, color=self.setColor(j, i, self.grid))
-                ax.add_artist(rects[i, j])
+        im = plt.imshow(self.seed, cmap=self.cm, interpolation='none')
 
         def init():
             self.reset()
+            return [im]
 
         def animate(k):
-            # Cambiamos los colores de los cuadrados
-            for i in range(self.N):
-                for j in range(self.N):
-                    rects[i, j].set_color(self.setColor(j, i, self.grid))
-            # Y actualizamos la simulación
             self.update()
-            return rects,
+            im.set_array(self.grid)
+            return [im]
 
         anim = FuncAnimation(
             fig, animate, **animArgs)
@@ -140,32 +106,9 @@ class CellularAutomata:
             anim.save(f'{filePath}.gif')
         return anim
 
-    def setColor(self, i, j, grid):
-        """
-        Dado una célula viva (Blanco) o muerta (negro) asigna un color al
-        cuadrado que la representa
-        Parameters
-        ----------
-        i : int
-        j : int
-        Indices de la matriz de rectángulos
-        grid : 2D narray
-            matriz con los datos de la simulación
-
-        Returns
-        -------
-        str
-            color de la célula
-
-        """
-        if grid[i, j] == 1:
-            return 'white'
-        else:
-            return 'black'
-
 
 class GameOfLife(CellularAutomata):
-    def function(self, neighbours, i, j):
+    def functionRules(self, neighbours, i, j):
         # Una célula muerta con 3 vecinos nace
         if self.grid[i, j] == 0 and neighbours == 3:
             return 1
@@ -178,7 +121,7 @@ class GameOfLife(CellularAutomata):
 
 
 class SmoothNoise(CellularAutomata):
-    def function(self, neighbours, i, j):
+    def functionRules(self, neighbours, i, j):
         if neighbours >= 5:
             return 1
         elif neighbours <= 2:
