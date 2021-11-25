@@ -37,18 +37,18 @@ animArgs1 = {'frames': 10, 'interval': 200, 'init_func': None}
 animArgs2 = {'frames': 5, 'interval': 200, 'repeat': False}
 
 
-GOL = GameOfLife(seed1)
-GOL.plotSeed(figArgs)
+GOL = GameOfLife(seed2)
+# GOL.plotSeed(figArgs)
 GOL.update()
-GOL.plotState(figArgs)
+# GOL.plotState(figArgs)
 GOL.reset()
-anim = GOL.animation(figArgs, animArgs1, True, 'GameOfLive')
+anim = GOL.animation(figArgs, animArgs1, False, 'GameOfLive')
 plt.show()
 
 
-SN = SmoothNoise(seed2)
-SN.plotSeed(figArgs)
-for i in range(10):
-    SN.update()
-    SN.plotState(figArgs)
-anim = SN.animation(figArgs, animArgs2, save=True, filePath='smoothNoise')
+# SN = SmoothNoise(seed2)
+# SN.plotSeed(figArgs)
+# for i in range(10):
+#     SN.update()
+#     SN.plotState(figArgs)
+# anim = SN.animation(figArgs, animArgs2, save=True, filePath='smoothNoise')
