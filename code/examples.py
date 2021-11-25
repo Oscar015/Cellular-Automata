@@ -47,7 +47,7 @@ anim = GOL.animation(figArgs, animArgs1, save=True,
 plt.show()
 
 
-# SN = SmoothNoise(seed2)
-# anim = SN.animation(figArgs, animArgs2, save=True,
-#                     filePath='.\media\smoothNoise2')
-# plt.show()
+SN = SmoothNoise(seed2)
+anim = SN.animation(figArgs, animArgs2, save=True,
+                    filePath='.\media\smoothNoise2')
+plt.show()
