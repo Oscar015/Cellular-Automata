@@ -42,7 +42,8 @@ GOL.plotSeed(figArgs)
 GOL.update()
 GOL.plotState(figArgs)
 GOL.reset()
-anim = GOL.animation(figArgs, animArgs1, True, '.\media\GameOfLive')
+anim = GOL.animation(figArgs, animArgs1, save=True,
+                     filePath='.\media\GameOfLive2')
 plt.show()
 
 
