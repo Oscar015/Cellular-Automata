@@ -34,21 +34,19 @@ seed2 = np.random.randint(0, 2, size=(100, 100))
 
 figArgs = {'dpi': 100, 'figsize': (5, 5)}
 animArgs1 = {'frames': 10, 'interval': 200, 'init_func': None}
-animArgs2 = {'frames': 5, 'interval': 200, 'repeat': False}
+animArgs2 = {'frames': 10, 'interval': 200, 'repeat': False}
 
 
-GOL = GameOfLife(seed2)
+# GOL = GameOfLife(seed2)
 # GOL.plotSeed(figArgs)
-GOL.update()
+# GOL.update()
 # GOL.plotState(figArgs)
-GOL.reset()
-anim = GOL.animation(figArgs, animArgs1, False, 'GameOfLive')
+# GOL.reset()
+# anim = GOL.animation(figArgs, animArgs1, False, '.\media\GameOfLive')
+# plt.show()
+
+
+SN = SmoothNoise(seed2)
+anim = SN.animation(figArgs, animArgs2, save=True,
+                    filePath='.\media\smoothNoise2')
 plt.show()
-
-
-# SN = SmoothNoise(seed2)
-# SN.plotSeed(figArgs)
-# for i in range(10):
-#     SN.update()
-#     SN.plotState(figArgs)
-# anim = SN.animation(figArgs, animArgs2, save=True, filePath='smoothNoise')
