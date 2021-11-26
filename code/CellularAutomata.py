@@ -46,10 +46,10 @@ class CellularAutomata:
         ax.yaxis.set_visible(False)
         plt.imshow(self.grid, cmap=self.cm, interpolation='none')
 
-    def functionRules(self, neighbours, i, j):
+    def _functionRules(self, neighbours, i, j):
         return self.grid[i, j]
 
-    def functionNeighbours(self, i, j):
+    def _functionNeighbours(self, i, j):
         neighbours = 0
         # Miramos los vecinos de la célula y contamos als vivas
         for x in range(-1, 2):
@@ -74,8 +74,8 @@ class CellularAutomata:
         # Recorremos todas las celulas
         for i in range(1, self.N-1):
             for j in range(1, self.M-1):
-                neighbours = self.functionNeighbours(i, j)
-                newGrid[i, j] = self.functionRules(neighbours, i, j)
+                neighbours = self._functionNeighbours(i, j)
+                newGrid[i, j] = self._functionRules(neighbours, i, j)
 
         self.grid = newGrid
 
@@ -113,7 +113,7 @@ class CellularAutomata:
 
 
 class GameOfLife(CellularAutomata):
-    def functionRules(self, neighbours, i, j):
+    def _functionRules(self, neighbours, i, j):
         # Una célula muerta con 3 vecinos nace
         if self.grid[i, j] == 0 and neighbours == 3:
             return 1
@@ -126,7 +126,7 @@ class GameOfLife(CellularAutomata):
 
 
 class SmoothNoise(CellularAutomata):
-    def functionRules(self, neighbours, i, j):
+    def _functionRules(self, neighbours, i, j):
         if neighbours >= 5:
             return 1
         elif neighbours <= 2:
