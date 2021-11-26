@@ -21,7 +21,7 @@ GOL.update()
 GOL.plotState(figArgs)
 GOL.reset()
 anim = GOL.animation(figArgs, animArgs1, save=False,
-                     filePath='..\media\GameOfLive2')
+                     filePath='..\media\GameOfLife2')
 plt.show()
 
 
