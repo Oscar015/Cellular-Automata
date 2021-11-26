@@ -86,6 +86,7 @@ class CellularAutomata:
         """
         def init():
             self.reset()
+            im.set_array(self.seed)
             return [im]
 
         def animate(k):
@@ -93,7 +94,9 @@ class CellularAutomata:
             im.set_array(self.grid)
             return [im]
 
-        animArgs = animArgs or {'frames': 1, 'interval': 200, 'initfunc': init}
+        animArgs = animArgs or {'frames': 10, 'interval': 200}
+        animArgs['init_func'] = animArgs.get('init_func') or init
+
         figArgs = figArgs or {'dpi': 150, 'figsize': (4, 4)}
 
         fig, ax = plt.subplots(**figArgs)
