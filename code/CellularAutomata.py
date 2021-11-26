@@ -100,7 +100,6 @@ class CellularAutomata:
         figArgs = figArgs or {'dpi': 150, 'figsize': (4, 4)}
 
         fig, ax = plt.subplots(**figArgs)
-        ax.axis('equal')
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
         im = plt.imshow(self.seed, cmap=self.cm, interpolation='none')
