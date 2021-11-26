@@ -21,11 +21,11 @@ GOL.update()
 GOL.plotState(figArgs)
 GOL.reset()
 anim = GOL.animation(figArgs, animArgs1, save=False,
-                     filePath='.\media\GameOfLive2')
+                     filePath='..\media\GameOfLive2')
 plt.show()
 
 
 SN = SmoothNoise(seed)
 anim = SN.animation(figArgs, animArgs2, save=False,
-                    filePath='.\media\smoothNoise2')
+                    filePath='..\media\smoothNoise2')
 plt.show()
